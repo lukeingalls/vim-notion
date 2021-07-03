@@ -78,7 +78,7 @@ const setActiveLine = (idx: number) => {
   if (idx >= lines.length) i = lines.length - 1;
   if (i < 0) i = 0;
   lines[active_line].element.removeEventListener("keydown", handleKeydown);
-  lines[i].element.focus();
+  lines[i].element.click();
   lines[i].element.addEventListener("keydown", handleKeydown);
   window.vim_info.active_line = i;
 };
