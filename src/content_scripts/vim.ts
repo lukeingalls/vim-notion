@@ -1,43 +1,60 @@
-let activeElementIdx: number;
-let fields: HTMLDivElement[] = [];
-
-const setFields = (f: HTMLDivElement[]) => {
-  if (typeof activeElementIdx === "undefined") activeElementIdx = 0;
-  fields = f;
-  setActiveElementIdx(activeElementIdx || 0);
+const setLines = (f: HTMLDivElement[]) => {
+  const { vim_info } = window;
+  vim_info.lines = f.map((elem) => ({
+    cursor_position: 0,
+    element: elem as HTMLDivElement,
+  }));
+  setActiveElementIdx(vim_info.active_line || 0);
 };
 
 const setActiveElementIdx = (idx: number) => {
+  const {
+    vim_info: { lines, active_line },
+  } = window;
   let i = idx;
 
-  if (idx >= fields.length) i = fields.length - 1;
+  if (idx >= lines.length) i = lines.length - 1;
   if (i < 0) i = 0;
-  fields[activeElementIdx].removeEventListener("keydown", jk);
-  fields[i].focus();
-  fields[i].addEventListener("keydown", jk);
-  activeElementIdx = i;
+  lines[active_line].element.removeEventListener("keydown", jk);
+  lines[i].element.focus();
+  lines[i].element.addEventListener("keydown", jk);
+  window.vim_info.active_line = i;
 };
 const jk = (e: KeyboardEvent) => {
   e.preventDefault();
+  const {
+    vim_info: { active_line },
+  } = window;
   if (e.key === "j") {
-    setActiveElementIdx(activeElementIdx + 1);
+    setActiveElementIdx(active_line + 1);
   }
   if (e.key === "k") {
-    setActiveElementIdx(activeElementIdx - 1);
+    setActiveElementIdx(active_line - 1);
   }
 };
 
 const createInfoContainer = () => {
+  const { vim_info } = window;
   const infoContainer = document.createElement("div");
-  infoContainer.classList.add("info-container");
+  infoContainer.classList.add("vim-info-container");
   const mode = document.createElement("div");
-  mode.innerText = "-- NORMAL --";
-  mode.classList.add("mode");
+  mode.innerText = vim_info.mode === "normal" ? "-- NORMAL --" : "-- INSERT --";
+  mode.classList.add("vim-mode");
   infoContainer.appendChild(mode);
   document.body.appendChild(infoContainer);
 };
 
+const initVimInfo = () => {
+  const vim_info = {
+    active_line: 0,
+    lines: [] as any,
+    mode: "normal" as const,
+  };
+  window.vim_info = vim_info;
+};
+
 (() => {
+  initVimInfo();
   createInfoContainer();
   const poll = setInterval(() => {
     const f = Array.from(
@@ -45,8 +62,7 @@ const createInfoContainer = () => {
     );
     if (f.length > 0) {
       clearInterval(poll);
-      console.log(f);
-      setFields(f as HTMLDivElement[]);
+      setLines(f as HTMLDivElement[]);
     }
   }, 250);
 })();
