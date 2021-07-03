@@ -1,0 +1,23 @@
+{
+  "name": "vim-notion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint",
+    "postbuild": "cp src/content_scripts/*.css build/content_scripts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chrome": "^0.0.145",
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
+    "eslint": "^7.30.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
+  }
+}

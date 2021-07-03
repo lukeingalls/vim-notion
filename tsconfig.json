@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM", "ESNext"],
+    "noImplicitAny": true,
+    "outDir": "build",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "target": "ES5",
+    "types": ["chrome"]
+  },
+  "include": [
+    "src/**/*", "src/**/*.json"
+  ],
+  "exclude": ["node_modules"]
+}
