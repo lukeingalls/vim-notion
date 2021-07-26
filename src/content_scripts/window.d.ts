@@ -5,6 +5,7 @@ interface VimLine {
 
 interface VimInfo {
   active_line: number;
+  cursor_position: number;
   lines: VimLine[];
   mode: "normal" | "insert";
 }

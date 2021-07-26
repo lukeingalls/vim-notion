@@ -9,8 +9,60 @@ const createInfoContainer = () => {
   document.body.appendChild(infoContainer);
 };
 
+const getCursorIndex = () => {
+  const range = document.getSelection().getRangeAt(0);
+
+  let i = 0;
+
+  const checkElementNode = (element: Element) => {
+    for (const node of Array.from(element.childNodes)) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (checkElementNode(node as Element)) {
+          break;
+        } else {
+          continue;
+        }
+      }
+      if (node.isSameNode(range.startContainer)) {
+        i += range.startOffset;
+        return true;
+      }
+      i += node.textContent.length;
+    }
+    return false;
+  };
+
+  checkElementNode(document.activeElement);
+  return i;
+};
+
 const getModeText = (mode: "insert" | "normal") => {
   return `-- ${mode.toUpperCase()} --`;
+};
+
+const setCursorPosition = (element: Element, index: number) => {
+  let i = 0;
+  const childNodes = Array.from(element.childNodes);
+
+  for (const node of childNodes) {
+    console.log(index, i, node.textContent.length);
+    const isInRange = index >= i && index <= i + node.textContent.length;
+    if (isInRange && node.nodeType === Node.ELEMENT_NODE) {
+      setCursorPosition(node as Element, index - i);
+      break;
+    }
+    if (isInRange) {
+      const range = document.createRange();
+      const selection = window.getSelection();
+
+      range.setStart(node, index - i);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      break;
+    }
+    i += node.textContent.length;
+  }
 };
 
 const handleKeydown = (e: KeyboardEvent) => {
@@ -22,9 +74,26 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 };
 
+// For reference only
+// const setCaret = () => {
+//   const el = document.activeElement;
+//   console.log(el);
+//   const range = document.createRange();
+//   console.log(range);
+//   const sel = window.getSelection();
+//   console.log(sel);
+//   console.log(el.childNodes);
+//   range.setStart(el.childNodes[1], 0);
+//   range.setEnd(el.childNodes[2], 0);
+
+//   sel.removeAllRanges();
+//   sel.addRange(range);
+// };
+
 const initVimInfo = () => {
   const vim_info = {
     active_line: 0,
+    cursor_position: 0,
     lines: [] as any,
     mode: "normal" as const,
   };
@@ -45,11 +114,30 @@ const insertReducer = (e: KeyboardEvent) => {
   return;
 };
 
+const moveCursorBackwards = () => {
+  const currentCursorPosition = getCursorIndex();
+  if (currentCursorPosition === 0) return;
+  setCursorPosition(document.activeElement, currentCursorPosition - 1);
+};
+
+const moveCursorForwards = () => {
+  const currentCursorPosition = getCursorIndex();
+  console.log(currentCursorPosition);
+  console.log(currentCursorPosition, document.activeElement.textContent.length);
+  if (currentCursorPosition >= document.activeElement.textContent.length)
+    return;
+  setCursorPosition(document.activeElement, currentCursorPosition + 1);
+};
+
 const normalReducer = (e: KeyboardEvent) => {
   const {
     vim_info: { active_line },
   } = window;
   switch (e.key) {
+    case "h":
+      e.preventDefault();
+      moveCursorBackwards();
+      break;
     case "i":
       e.preventDefault();
       window.vim_info.mode = "insert";
@@ -62,6 +150,10 @@ const normalReducer = (e: KeyboardEvent) => {
     case "k":
       e.preventDefault();
       setActiveLine(active_line - 1);
+      break;
+    case "l":
+      e.preventDefault();
+      moveCursorForwards();
       break;
     default:
       e.preventDefault();
