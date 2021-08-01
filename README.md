@@ -1,8 +1,8 @@
 # VIM for Notion
 
-This is a project created by [Luke Ingalls](https://www.linkedin.com/in/luke-ingalls/)
+This is a project created by [Luke Ingalls](https://www.linkedin.com/in/luke-ingalls/).
 
-In general, I have implemented commands to the degree in which I use them or don't have a (reasonable) browser equivalent. This is by no means meant to be a complete implementation. If you have questions you can reach out to me.
+In general, I have implemented commands to the degree in which I miss them when using notion. This is by no means meant to be a complete implementation. If you have questions you can reach out to me.
 
 # Supported commands
 
