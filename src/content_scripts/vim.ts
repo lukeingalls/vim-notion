@@ -47,7 +47,6 @@ const setCursorPosition = (element: Element, index: number) => {
   const childNodes = Array.from(element.childNodes);
 
   for (const node of childNodes) {
-    console.log(index, i, node.textContent.length);
     const isInRange = index >= i && index <= i + node.textContent.length;
     if (isInRange && node.nodeType === Node.ELEMENT_NODE) {
       setCursorPosition(node as Element, index - i);
@@ -124,8 +123,6 @@ const moveCursorBackwards = () => {
 
 const moveCursorForwards = () => {
   const currentCursorPosition = getCursorIndex();
-  console.log(currentCursorPosition);
-  console.log(currentCursorPosition, document.activeElement.textContent.length);
   if (currentCursorPosition >= document.activeElement.textContent.length)
     return;
   setCursorPosition(document.activeElement, currentCursorPosition + 1);
