@@ -1,3 +1,5 @@
+import { keywords } from "../constants";
+
 const createInfoContainer = () => {
   const { vim_info } = window;
   const infoContainer = document.createElement("div");
