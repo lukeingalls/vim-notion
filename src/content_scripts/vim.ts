@@ -1,4 +1,4 @@
-import { keywords } from "../constants";
+import { keywords, whitespace } from "../constants";
 
 const createInfoContainer = () => {
   const { vim_info } = window;
@@ -9,6 +9,49 @@ const createInfoContainer = () => {
   mode.classList.add("vim-mode");
   infoContainer.appendChild(mode);
   document.body.appendChild(infoContainer);
+};
+
+// W
+const jumpToNextWORD = (node?: HTMLElement, start_position?: number) => {
+  const active_line = getActiveLine();
+  const lines = getLines();
+  const currentCursorPosition = start_position ?? getCursorIndex();
+  const currentNode = node || (document.activeElement as HTMLElement);
+  const currentLineTextContent = currentNode.innerText;
+
+  const currentRemainingText = currentLineTextContent.slice(
+    currentCursorPosition
+  );
+
+  const nextWhiteSpaceAfterCursor = currentRemainingText.search(whitespace);
+  const nextWhiteSpaceIndex =
+    nextWhiteSpaceAfterCursor >= 0
+      ? currentCursorPosition + nextWhiteSpaceAfterCursor
+      : currentLineTextContent.length;
+  if (nextWhiteSpaceIndex < currentLineTextContent.length) {
+    setCursorPosition(currentNode, nextWhiteSpaceIndex + 1);
+    return;
+  }
+  // we are on the original line
+  if (!node && lines[active_line + 1]?.element) {
+    const new_elem = lines[active_line + 1].element;
+    setActiveLine(active_line + 1);
+    if (whitespace.test(new_elem.innerText[0])) {
+      jumpToNextWORD(lines[active_line + 1].element, 0);
+    } else {
+      setCursorPosition(new_elem, 0);
+    }
+    return;
+  }
+  setCursorPosition(currentNode, nextWhiteSpaceIndex);
+};
+
+const getActiveLine = () => {
+  return window.vim_info.active_line;
+};
+
+const getLines = () => {
+  return window.vim_info.lines;
 };
 
 const getCursorIndex = () => {
@@ -154,6 +197,10 @@ const normalReducer = (e: KeyboardEvent) => {
       e.preventDefault();
       moveCursorForwards();
       break;
+    case "W":
+      e.preventDefault();
+      jumpToNextWORD();
+      break;
     default:
       e.preventDefault();
       break;
@@ -162,8 +209,9 @@ const normalReducer = (e: KeyboardEvent) => {
 
 const setActiveLine = (idx: number) => {
   const {
-    vim_info: { lines, active_line },
+    vim_info: { lines },
   } = window;
+  const active_line = getActiveLine();
   let i = idx;
 
   if (idx >= lines.length) i = lines.length - 1;

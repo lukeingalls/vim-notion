@@ -62,7 +62,7 @@ In general, I have implemented commands to the degree in which I miss them when 
 | `T` |     🗓     |                                                                                                                                    |
 | `U` |    ❌     |                                                                                                                                    |
 | `V` |    ❌     |                                                                                                                                    |
-| `W` |     🗓     |                                                                                                                                    |
+| `W` |    ✅     |                                                                                                                                    |
 | `X` |     🗓     |                                                                                                                                    |
 | `Y` |    ❌     |                                                                                                                                    |
 | `Z` |    ❌     |                                                                                                                                    |
