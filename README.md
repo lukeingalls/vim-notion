@@ -14,7 +14,7 @@ In general, I have implemented commands to the degree in which I miss them when 
 
 | Key | Supported | Comments                                                                                                                           |
 | :-: | :-------: | :--------------------------------------------------------------------------------------------------------------------------------- |
-| `a` |     🗓     | [`caret-shape`](https://css-tricks.com/almanac/properties/c/caret-shape/) isn't supported yet so `i` and `a` operate the same way. |
+| `a` |    ✅     | [`caret-shape`](https://css-tricks.com/almanac/properties/c/caret-shape/) isn't supported yet so `i` and `a` operate the same way. |
 | `b` |     🗓     |                                                                                                                                    |
 | `c` |     🗓     |                                                                                                                                    |
 | `d` |     🗓     |                                                                                                                                    |
