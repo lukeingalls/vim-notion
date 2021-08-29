@@ -176,14 +176,15 @@ const normalReducer = (e: KeyboardEvent) => {
     vim_info: { active_line },
   } = window;
   switch (e.key) {
-    case "h":
-      e.preventDefault();
-      moveCursorBackwards();
-      break;
+    case "a":
     case "i":
       e.preventDefault();
       window.vim_info.mode = "insert";
       updateInfoContainer();
+      break;
+    case "h":
+      e.preventDefault();
+      moveCursorBackwards();
       break;
     case "j":
       e.preventDefault();
