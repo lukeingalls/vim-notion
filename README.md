@@ -1,3 +1,6 @@
+> [!TIP]
+> [Vimtion](https://github.com/tatsukamijo/vimtion) is a more complete fork of this repo created by tatsukamijo. It's worth checking that out before diving too deep into this repo.
+
 # VIM for Notion
 
 This is a project created by [Luke Ingalls](https://www.linkedin.com/in/luke-ingalls/).
